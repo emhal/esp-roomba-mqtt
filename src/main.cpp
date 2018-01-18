@@ -71,10 +71,10 @@ bool performCommand(const char *cmdchar) {
   String cmd(cmdchar);
 
   // MQTT protocol commands
-  if (cmd == "turn_on") {
+  if (cmd == "on") {
     DLOG("Turning on\n");
     roomba.cover();
-  } else if (cmd == "turn_off") {
+  } else if (cmd == "off") {
     DLOG("Turning off\n");
     roomba.power();
   } else if (cmd == "toggle") {
@@ -83,13 +83,13 @@ bool performCommand(const char *cmdchar) {
   } else if (cmd == "stop") {
     DLOG("Stopping\n");
     roomba.cover();
-  } else if (cmd == "clean_spot") {
+  } else if (cmd == "spot") {
     DLOG("Cleaning Spot\n");
     roomba.spot();
   } else if (cmd == "locate") {
     DLOG("Locating\n");
     // TODO
-  } else if (cmd == "return_to_base") {
+  } else if (cmd == "dock") {
     DLOG("Returning to Base\n");
     roomba.dock();
   } else {
@@ -125,7 +125,7 @@ void debugCallback() {
     DLOG("Resetting Roomba\n");
     roomba.reset();
   } else if (cmd == "mqtthello") {
-    mqttClient.publish("vacuum/hello", "hello there");
+    mqttClient.publish("stat/roomba/msg", "hello there");
   } else if (cmd == "version") {
     const char compile_date[] = __DATE__ " " __TIME__;
     DLOG("Compiled on: %s\n", compile_date);
@@ -141,6 +141,7 @@ void setup() {
   // Set Hostname.
   String hostname(HOSTNAME);
   WiFi.hostname(hostname);
+  WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
   while (WiFi.status() != WL_CONNECTED) {
