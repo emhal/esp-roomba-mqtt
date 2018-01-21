@@ -142,6 +142,7 @@ void setup() {
   String hostname(HOSTNAME);
   WiFi.hostname(hostname);
   WiFi.mode(WIFI_STA);
+  //WiFi.setSleepMode(WIFI_LIGHT_SLEEP);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
   while (WiFi.status() != WL_CONNECTED) {
@@ -149,6 +150,8 @@ void setup() {
   }
 
   ArduinoOTA.setHostname((const char *)hostname.c_str());
+  String password(OTA_PASSWORD);
+  ArduinoOTA.setPassword((const char *)password.c_str());
   ArduinoOTA.begin();
 
   mqttClient.setServer(MQTT_SERVER, 1883);
@@ -254,4 +257,5 @@ void loop() {
   yield();
   Debug.handle();
   mqttClient.loop();
+  //delay(50);
 }
